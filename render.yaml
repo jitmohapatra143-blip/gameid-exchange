@@ -1,0 +1,28 @@
+# render.yaml
+services:
+  - type: web
+    name: gameid-exchange-backend
+    env: node
+    plan: free
+    buildCommand: "npm install"
+    startCommand: "node backend/server.mjs"
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: gameid-exchange-db
+          property: connectionString
+      - key: JWT_SECRET
+        value: "your_secret_key"
+
+  - type: static
+    name: gameid-exchange-frontend
+    env: static
+    buildCommand: "npm install && npm run build"
+    publishPath: frontend/dist
+    autoDeploy: true
+
+databases:
+  - name: gameid-exchange-db
+    plan: free
+    
